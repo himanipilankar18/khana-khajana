@@ -17,10 +17,26 @@ import {
 } from '@expo/vector-icons';
 import { db } from './firebase';
 import { collection, getDocs } from 'firebase/firestore';
+import MapView, { Marker } from 'react-native-maps';
+import * as Location from 'expo-location';
 
 export default function HomePage({ navigation }) {
   const [topRatedVendors, setTopRatedVendors] = useState([]);
   const [popularFoodTrails, setPopularFoodTrails] = useState([]);
+  const [location, setLocation] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        console.error('Permission to access location was denied');
+        return;
+      }
+
+      let loc = await Location.getCurrentPositionAsync({});
+      setLocation(loc.coords);
+    })();
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,14 +44,28 @@ export default function HomePage({ navigation }) {
         const vendorsSnapshot = await getDocs(collection(db, 'vendors'));
         const vendors = vendorsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
-        const topRated = vendors
-        .filter(vendor => vendor.rating >= 1.5)
-        .sort((a, b) => b.rating - a.rating)
-        .slice(0, 5); // top 5
-        const foodTrails = vendors
-  .filter(vendor => vendor.likes && vendor.likes > 50)
-  .sort((a, b) => b.likes - a.likes)
-  .slice(0, 5);
+        const filteredVendors = location
+          ? vendors.filter(vendor => {
+              const dist = getDistanceFromLatLonInKm(
+                location.latitude,
+                location.longitude,
+                vendor.latitude,
+                vendor.longitude
+              );
+              return dist <= 10; // only within 10 km
+            })
+          : vendors;
+
+        const topRated = filteredVendors
+          .filter(vendor => vendor.rating >= 1.5)
+          .sort((a, b) => b.rating - a.rating)
+          .slice(0, 5);
+
+        const foodTrails = filteredVendors
+          .filter(vendor => vendor.likes && vendor.likes > 50)
+          .sort((a, b) => b.likes - a.likes)
+          .slice(0, 5);
+
         setTopRatedVendors(topRated);
         setPopularFoodTrails(foodTrails);
       } catch (error) {
@@ -43,8 +73,25 @@ export default function HomePage({ navigation }) {
       }
     };
 
-    fetchData();
-  }, []);
+    if (location) fetchData();
+  }, [location]);
+
+  function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+    var R = 6371; // Radius of the earth in km
+    var dLat = deg2rad(lat2 - lat1);
+    var dLon = deg2rad(lon2 - lon1);
+    var a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    var d = R * c;
+    return d;
+  }
+
+  function deg2rad(deg) {
+    return deg * (Math.PI / 180);
+  }
 
   return (
     <ScrollView contentContainerStyle={styles.scroll}>
@@ -69,10 +116,29 @@ export default function HomePage({ navigation }) {
 
       <Text style={styles.sectionTitle}>How Khana Khazana Works</Text>
       <View style={styles.cardContainer}>
-        <FeatureCard icon={<MaterialIcons name="stars" size={32} color="#f57c00" />} title="Rate Vendors" />
+        <FeatureCard icon={<MaterialIcons name="stars" size={32} color="#f57c00" />} title="Add me a vendor" />
         <FeatureCard icon={<Ionicons name="location" size={32} color="#f57c00" />} title="Find Spots" />
         <FeatureCard icon={<MaterialCommunityIcons name="food-fork-drink" size={32} color="#f57c00" />} title="Review Food" />
       </View>
+
+      {location && (
+        <View style={{ height: 200, margin: 16, borderRadius: 12, overflow: 'hidden' }}>
+          <MapView
+            style={{ flex: 1 }}
+            region={{
+              latitude: location.latitude,
+              longitude: location.longitude,
+              latitudeDelta: 0.01,
+              longitudeDelta: 0.01,
+            }}
+          >
+            <Marker
+              coordinate={{ latitude: location.latitude, longitude: location.longitude }}
+              title="You are here"
+            />
+          </MapView>
+        </View>
+      )}
 
       <Text style={styles.sectionTitle}>Top-Rated Vendors</Text>
       <FlatList
