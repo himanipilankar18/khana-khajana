@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase'; // Adjust path if needed
-import ReviewList from './ReviewList';
+import ReviewForm from './ReviewForm';
 import AddReviewForm from './AddReviewForm';
 
 
@@ -35,8 +35,8 @@ const VendorCard = ({ vendor }) => {
       <Text style={styles.name}>{vendor.name}</Text>
       <Text style={styles.location}>📍 {vendor.location}</Text>
       <Text style={styles.score}>🧼 Hygiene Score: {vendor.hygiene_score}</Text>
-      <ReviewList vendorId={vendor.id} />
-      <AddReviewForm vendorId={vendor.id} />
+      <ReviewForm vendorId={vendor.id} />
+      
       <View style={styles.reviewSection}>
         <Text style={styles.reviewTitle}>Reviews:</Text>
         {reviews.length === 0 ? (
