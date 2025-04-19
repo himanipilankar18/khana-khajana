@@ -1,5 +1,7 @@
+
+// VendorList.js
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { collection, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase';
 import VendorCard from './VendorCard';
@@ -32,6 +34,7 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 10,
     paddingBottom: 20,
+    backgroundColor: '#F5CB58'
   },
 });
 

@@ -1,10 +1,10 @@
+// VendorCard.js
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import { collection, getDocs } from 'firebase/firestore';
-import { db } from '../firebase'; // Adjust path if needed
+import { db } from '../firebase';
 import ReviewForm from './ReviewForm';
 import AddReviewForm from './AddReviewForm';
-
 
 const VendorCard = ({ vendor }) => {
   const [reviews, setReviews] = useState([]);
@@ -12,7 +12,6 @@ const VendorCard = ({ vendor }) => {
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        // 🔍 Navigate to: vendors > [vendor.id] > reviews
         const reviewSnapshot = await getDocs(collection(db, 'vendors', vendor.id, 'reviews'));
         const reviewList = reviewSnapshot.docs.map(doc => doc.data());
         setReviews(reviewList);
@@ -24,29 +23,16 @@ const VendorCard = ({ vendor }) => {
     fetchReviews();
   }, [vendor.id]);
 
-  // 🖼️ Display the vendor image, if available
   const imageUrl = vendor.imageUrl || vendor.image;
 
   return (
     <View style={styles.card}>
-      {imageUrl && (
-        <Image source={{ uri: imageUrl }} style={styles.image} />
-      )}
+      {imageUrl && <Image source={{ uri: imageUrl }} style={styles.image} />}
       <Text style={styles.name}>{vendor.name}</Text>
       <Text style={styles.location}>📍 {vendor.location}</Text>
       <Text style={styles.score}>🧼 Hygiene Score: {vendor.hygiene_score}</Text>
       <ReviewForm vendorId={vendor.id} />
-      
-      <View style={styles.reviewSection}>
-        <Text style={styles.reviewTitle}>Reviews:</Text>
-        {reviews.length === 0 ? (
-          <Text style={styles.noReviews}>No reviews yet.</Text>
-        ) : (
-          reviews.map((review, index) => (
-            <Text key={index} style={styles.reviewText}>• {review.text}</Text>
-          ))
-        )}
-      </View>
+      <AddReviewForm vendorId={vendor.id} />
     </View>
   );
 };
@@ -58,6 +44,10 @@ const styles = StyleSheet.create({
     padding: 16,
     margin: 12,
     elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
   },
   image: {
     width: '100%',
@@ -77,22 +67,6 @@ const styles = StyleSheet.create({
     marginTop: 6,
     fontWeight: 'bold',
     color: '#388e3c',
-  },
-  reviewSection: {
-    marginTop: 14,
-  },
-  reviewTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  noReviews: {
-    fontStyle: 'italic',
-    color: '#888',
-    marginTop: 4,
-  },
-  reviewText: {
-    marginTop: 4,
-    color: '#333',
   },
 });
 

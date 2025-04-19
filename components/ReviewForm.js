@@ -1,59 +1,65 @@
-// components/ReviewForm.js
-import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet, Text } from 'react-native';
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
 
-export default function ReviewForm({ vendorId, userId, onReviewSubmitted }) {
-  const [rating, setRating] = useState('');
-  const [comment, setComment] = useState('');
+const ReviewForm = ({ vendorId }) => {
+  const [reviews, setReviews] = useState([]);
 
-  const handleSubmit = async () => {
-    if (!rating || !comment) return;
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const reviewsSnapshot = await getDocs(collection(db, 'vendors', vendorId, 'reviews'));
+        const reviewData = reviewsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setReviews(reviewData);
+      } catch (error) {
+        console.error('Error fetching reviews:', error);
+      }
+    };
 
-    await addDoc(collection(db, 'vendors', vendorId, 'reviews'), {
-      hygieneRating: parseFloat(rating),
-      comment,
-      userId,
-      timestamp: serverTimestamp(),
-    });
+    fetchReviews();
+  }, [vendorId]);
 
-    setRating('');
-    setComment('');
-    onReviewSubmitted(); // Refresh list or trigger toast
-  };
+  if (reviews.length === 0) {
+    return <Text style={styles.noReviews}>No reviews yet.</Text>;
+  }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Your Hygiene Rating (1-5):</Text>
-      <TextInput
-        style={styles.input}
-        keyboardType="numeric"
-        value={rating}
-        onChangeText={setRating}
-        placeholder="Enter rating"
-      />
-      <Text style={styles.label}>Comment:</Text>
-      <TextInput
-        style={[styles.input, { height: 80 }]}
-        multiline
-        value={comment}
-        onChangeText={setComment}
-        placeholder="Write a review..."
-      />
-      <Button title="Submit Review" onPress={handleSubmit} />
+      {reviews.map(review => (
+        <View key={review.id} style={styles.reviewBox}>
+          <Text style={styles.reviewer}>{review.username || 'Anonymous'}</Text>
+          <Text style={styles.comment}>{review.comment}</Text>
+        </View>
+      ))}
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  container: { marginTop: 20 },
-  label: { marginBottom: 5, fontWeight: 'bold' },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
+  container: { marginTop: 10 },
+  reviewBox: {
+    backgroundColor: '#f9f9f9',
     padding: 10,
-    marginBottom: 15,
-    borderRadius: 5,
+    borderRadius: 10,
+    marginBottom: 8,
+  },
+  reviewer: {
+    fontWeight: 'bold',
+    fontSize: 14,
+    color: '#333',
+  },
+  comment: {
+    marginTop: 4,
+    fontSize: 13,
+    color: '#555',
+  },
+  noReviews: {
+    fontStyle: 'italic',
+    color: '#888',
+    fontSize: 13,
+    marginTop: 5,
   },
 });
+
+export default ReviewForm;

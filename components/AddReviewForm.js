@@ -1,57 +1,57 @@
-// components/AddReviewForm.js
 import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet, Alert } from 'react-native';
+import { View, TextInput, Button, StyleSheet } from 'react-native';
 import { addDoc, collection } from 'firebase/firestore';
 import { db } from '../firebase';
 
-export default function AddReviewForm({ vendorId }) {
+const AddReviewForm = ({ vendorId }) => {
   const [comment, setComment] = useState('');
 
   const handleSubmit = async () => {
-    if (!comment.trim()) {
-      Alert.alert('Please enter a review.');
-      return;
-    }
-
+    if (!comment.trim()) return;
     try {
       await addDoc(collection(db, 'vendors', vendorId, 'reviews'), {
         comment,
-        createdAt: new Date(),
+        createdAt: new Date()
       });
       setComment('');
-      Alert.alert('Review added!');
-    } catch (err) {
-      console.error('Error adding review:', err);
-      Alert.alert('Failed to add review.');
+    } catch (error) {
+      console.error('Error adding review:', error);
     }
   };
 
   return (
     <View style={styles.container}>
       <TextInput
-        placeholder="Write your review..."
+        style={styles.input}
+        placeholder="Add a review"
         value={comment}
         onChangeText={setComment}
-        style={styles.input}
-        multiline
       />
-      <Button title="Submit Review" onPress={handleSubmit} color="#f57c00" />
+      <Button title="Submit" color="#E95322" onPress={handleSubmit} />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     marginTop: 10,
-    marginBottom: 15,
-    paddingHorizontal: 10,
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
   },
   input: {
+    borderColor: '#E95322',
     borderWidth: 1,
-    borderColor: '#ccc',
     borderRadius: 8,
-    padding: 10,
+    padding: 8,
     marginBottom: 8,
     backgroundColor: '#fff',
   },
 });
+
+export default AddReviewForm;

@@ -126,10 +126,9 @@ export default function HomePage({ navigation }) {
             <Ionicons name="search" size={18} color="#fff" />
             <Text style={styles.btnText}>Find Vendors</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.actionBtn}>
-            <FontAwesome5 name="map-marker-alt" size={18} color="#fff" />
-            <Text style={styles.btnText}>Explore Trails</Text>
-          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('ExploreTraits')}>
+  <Text>Explore Traits</Text>
+</TouchableOpacity>
         </View>
       </LinearGradient>
 
