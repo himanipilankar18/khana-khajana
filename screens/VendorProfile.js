@@ -4,55 +4,25 @@ import { db } from '../firebase';
 import { doc, getDoc } from 'firebase/firestore';
 
 export default function VendorProfile({ route }) {
-  const { vendorId } = route.params;
-  const [vendor, setVendor] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchVendor = async () => {
-      try {
-        const vendorRef = doc(db, 'vendors', vendorId);
-        const vendorSnap = await getDoc(vendorRef);
-
-        if (vendorSnap.exists()) {
-          setVendor(vendorSnap.data());
-        } else {
-          console.warn('Vendor not found');
-        }
-      } catch (error) {
-        console.error('Error fetching vendor profile:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchVendor();
-  }, [vendorId]);
-
-  if (loading) {
+    const { vendor } = route.params;
+  
+    if (!vendor) {
+      return (
+        <View style={styles.center}>
+          <Text>Vendor not found.</Text>
+        </View>
+      );
+    }
+  
     return (
-      <View style={styles.center}>
-        <ActivityIndicator size="large" color="#FF5722" />
-      </View>
+      <ScrollView contentContainerStyle={styles.container}>
+        <Image source={{ uri: vendor.image }} style={styles.image} />
+        <Text style={styles.name}>{vendor.name}</Text>
+        <Text style={styles.description}>{vendor.description || 'No description available.'}</Text>
+      </ScrollView>
     );
   }
-
-  if (!vendor) {
-    return (
-      <View style={styles.center}>
-        <Text>Vendor not found.</Text>
-      </View>
-    );
-  }
-
-  return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Image source={{ uri: vendor.image }} style={styles.image} />
-      <Text style={styles.name}>{vendor.name}</Text>
-      <Text style={styles.description}>{vendor.description || 'No description available.'}</Text>
-    </ScrollView>
-  );
-}
+  
 
 const styles = StyleSheet.create({
   container: {

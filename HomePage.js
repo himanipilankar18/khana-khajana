@@ -8,6 +8,10 @@ import {
   FlatList,
   Image,
 } from 'react-native';
+import Carousel from 'react-native-reanimated-carousel';
+
+import { Dimensions } from 'react-native';
+
 import { LinearGradient } from 'expo-linear-gradient';
 import {
   Ionicons,
@@ -19,6 +23,7 @@ import { db } from './firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
+const { width: screenWidth } = Dimensions.get('window');
 
 export default function HomePage({ navigation }) {
   const [topRatedVendors, setTopRatedVendors] = useState([]);
@@ -156,8 +161,10 @@ export default function HomePage({ navigation }) {
 
       {location && (
         <View style={styles.mapContainer}>
-          <MapView
-            style={StyleSheet.absoluteFillObject}
+         <MapView
+  style={StyleSheet.absoluteFillObject}
+
+
             region={{
               latitude: location.latitude,
               longitude: location.longitude,
@@ -176,51 +183,57 @@ export default function HomePage({ navigation }) {
         </View>
       )}
 
-      <Text style={styles.sectionTitle}>Top-Rated Vendors</Text>
-      <FlatList
-        horizontal
-        data={topRatedVendors}
-        keyExtractor={(item) => item.id}
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.horizontalList}
-        renderItem={({ item }) => (
-          <View style={styles.vendorCard}>
-            <Image source={{ uri: item.image }} style={styles.vendorImage} />
-            <Text style={styles.vendorName}>{item.name}</Text>
-            <Text style={styles.vendorLocation}>{item.location}</Text>
-            <Text style={styles.vendorSpecialty}>
-              Specialty: {item.specialty}
-            </Text>
-            <Text style={styles.vendorRating}>Rating: {item.rating}⭐</Text>
-          </View>
-        )}
-      />
+<Text style={styles.sectionTitle}>Top-Rated Vendors</Text>
+<Carousel
+  width={250}
+  height={280}
+  data={topRatedVendors}
+  scrollAnimationDuration={800}
+  renderItem={({ item }) => (
+    <View style={styles.carouselCard}>
+      {item.image ? (
+        <Image source={{ uri: item.image }} style={styles.carouselImage} />
+      ) : (
+        <View style={[styles.carouselImage, { backgroundColor: '#ccc' }]} />
+      )}
+      <Text style={styles.vendorName}>{item.name}</Text>
+      <Text style={styles.vendorLocation}>{item.location}</Text>
+      <Text style={styles.vendorSpecialty}>Specialty: {item.specialty}</Text>
+      <Text style={styles.vendorRating}>Rating: {item.rating}⭐</Text>
+    </View>
+  )}
+/>
 
-      <Text style={styles.sectionTitle}>Popular Food Trails</Text>
-      <FlatList
-        horizontal
-        data={popularFoodTrails}
-        keyExtractor={(item) => item.id}
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.horizontalList}
-        renderItem={({ item }) => (
-          <View style={styles.foodTrailCard}>
-            <Image source={{ uri: item.image }} style={styles.foodTrailImage} />
-            <Text style={styles.foodTrailName}>{item.name}</Text>
-            <Text style={styles.foodTrailLikes}>{item.likes} Likes</Text>
-            <Text style={styles.foodTrailAddress}>
-              Address: {item.address}
-            </Text>
-          </View>
-        )}
-      />
+
+
+<Text style={styles.sectionTitle}>Popular Food Trails</Text>
+<Carousel
+  width={250}
+  height={260}
+  data={popularFoodTrails}
+  scrollAnimationDuration={800}
+  renderItem={({ item }) => (
+    <View style={styles.carouselCard}>
+      {item.image ? (
+        <Image source={{ uri: item.image }} style={styles.carouselImage} />
+      ) : (
+        <View style={[styles.carouselImage, { backgroundColor: '#ccc' }]} />
+      )}
+      <Text style={styles.foodTrailName}>{item.name}</Text>
+      <Text style={styles.foodTrailLikes}>{item.likes} Likes</Text>
+      <Text style={styles.foodTrailAddress}>Address: {item.address}</Text>
+    </View>
+  )}
+/>
+
+
     </ScrollView>
   );
 }
 
 const FeatureCard = ({ icon, title }) => (
   <View style={styles.card}>
-    {icon}
+    {icon ? icon : <Text>🚫</Text>}
     <Text style={styles.cardText}>{title}</Text>
   </View>
 );
@@ -245,6 +258,21 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginHorizontal: 10,
   },
+  carouselCard: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 12,
+    marginHorizontal: 5,
+    alignItems: 'center',
+    elevation: 4,
+  },
+  carouselImage: {
+    width: '100%',
+    height: 120,
+    borderRadius: 10,
+    marginBottom: 10,
+  }
+,  
   btnText: { color: '#fff', marginLeft: 8, fontSize: 16 },
   sectionTitle: {
     fontSize: 20,

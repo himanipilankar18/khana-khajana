@@ -1,10 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  Image,
+  StyleSheet,
+  TextInput
+} from 'react-native';
 import { db } from '../firebase';
 import { collection, getDocs } from 'firebase/firestore';
 
 export default function ExploreTraits({ navigation }) {
   const [foods, setFoods] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     const fetchFoods = async () => {
@@ -20,11 +29,24 @@ export default function ExploreTraits({ navigation }) {
     fetchFoods();
   }, []);
 
+  // Filtered traits based on search query
+  const filteredFoods = foods.filter(item =>
+    item.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>Explore Traits</Text>
+
+      <TextInput
+        style={styles.searchInput}
+        placeholder="Search traits..."
+        value={searchQuery}
+        onChangeText={setSearchQuery}
+      />
+
       <FlatList
-        data={foods}
+        data={filteredFoods}
         keyExtractor={item => item.id}
         renderItem={({ item }) => (
           <View style={styles.foodCard}>
@@ -32,18 +54,30 @@ export default function ExploreTraits({ navigation }) {
             <FlatList
               data={item.vendors}
               keyExtractor={(vendor, index) => `${item.id}-${index}`}
-              renderItem={({ item: vendor }) => (
-                <TouchableOpacity
-                  style={styles.vendorCard}
-                  onPress={() => navigation.navigate('VendorProfile', { vendorId: vendor.id })}
-                >
-                  <Image
-  source={{ uri: vendor.image || 'https://via.placeholder.com/80' }}
-  style={styles.vendorImage}
-/>
-                  <Text style={styles.vendorName}>{vendor.name}</Text>
-                </TouchableOpacity>
-              )}
+              renderItem={({ item: vendorRaw }) => {
+                const vendor = {
+                  id: vendorRaw.id?.trim(),
+                  name: vendorRaw.name?.trim(),
+                  image: vendorRaw.image?.trim(),
+                };
+
+                if (!vendor.id || !vendor.name) return null;
+
+                return (
+                  <TouchableOpacity
+                    style={styles.vendorCard}
+                    onPress={() =>
+                      navigation.navigate('VendorProfile', { vendor })
+                    }
+                  >
+                    <Image
+                      source={{ uri: vendor.image || 'https://via.placeholder.com/80' }}
+                      style={styles.vendorImage}
+                    />
+                    <Text style={styles.vendorName}>{vendor.name}</Text>
+                  </TouchableOpacity>
+                );
+              }}
               horizontal
               nestedScrollEnabled={true}
               showsHorizontalScrollIndicator={false}
@@ -64,7 +98,15 @@ const styles = StyleSheet.create({
   heading: {
     fontSize: 24,
     fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  searchInput: {
+    backgroundColor: '#fff',
+    padding: 10,
+    borderRadius: 10,
     marginBottom: 20,
+    fontSize: 16,
+    elevation: 2,
   },
   foodCard: {
     marginBottom: 30,
