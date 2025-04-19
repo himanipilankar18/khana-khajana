@@ -6,14 +6,14 @@ import {
   StyleSheet,
   ScrollView,
   FlatList,
-  Image
+  Image,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import {
   Ionicons,
   FontAwesome5,
   MaterialIcons,
-  MaterialCommunityIcons
+  MaterialCommunityIcons,
 } from '@expo/vector-icons';
 import { db } from './firebase';
 import { collection, getDocs } from 'firebase/firestore';
@@ -27,14 +27,22 @@ export default function HomePage({ navigation }) {
 
   useEffect(() => {
     (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        console.error('Permission to access location was denied');
-        return;
-      }
+      try {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+          console.warn('Permission to access location was denied');
+          // Fallback to CST Mumbai
+          setLocation({ latitude: 18.9402, longitude: 72.8356 });
+          return;
+        }
 
-      let loc = await Location.getCurrentPositionAsync({});
-      setLocation(loc.coords);
+        let loc = await Location.getCurrentPositionAsync({});
+        setLocation(loc.coords);
+        console.log('User location:', loc.coords);
+      } catch (error) {
+        console.error('Location error:', error);
+        setLocation({ latitude: 18.9402, longitude: 72.8356 });
+      }
     })();
   }, []);
 
@@ -42,34 +50,37 @@ export default function HomePage({ navigation }) {
     const fetchData = async () => {
       try {
         const vendorsSnapshot = await getDocs(collection(db, 'vendors'));
-        const vendors = vendorsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const vendors = vendorsSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
 
         const filteredVendors = location
-          ? vendors.filter(vendor => {
+          ? vendors.filter((vendor) => {
               const dist = getDistanceFromLatLonInKm(
                 location.latitude,
                 location.longitude,
                 vendor.latitude,
                 vendor.longitude
               );
-              return dist <= 10; // only within 10 km
+              return dist <= 10;
             })
           : vendors;
 
         const topRated = filteredVendors
-          .filter(vendor => vendor.rating >= 1.5)
+          .filter((vendor) => vendor.rating >= 1.5)
           .sort((a, b) => b.rating - a.rating)
           .slice(0, 5);
 
         const foodTrails = filteredVendors
-          .filter(vendor => vendor.likes && vendor.likes > 50)
+          .filter((vendor) => vendor.likes && vendor.likes > 50)
           .sort((a, b) => b.likes - a.likes)
           .slice(0, 5);
 
         setTopRatedVendors(topRated);
         setPopularFoodTrails(foodTrails);
       } catch (error) {
-        console.error("Error fetching vendors:", error);
+        console.error('Error fetching vendors:', error);
       }
     };
 
@@ -77,13 +88,15 @@ export default function HomePage({ navigation }) {
   }, [location]);
 
   function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
-    var R = 6371; // Radius of the earth in km
+    var R = 6371;
     var dLat = deg2rad(lat2 - lat1);
     var dLon = deg2rad(lon2 - lon1);
     var a =
       Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
-      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+      Math.cos(deg2rad(lat1)) *
+        Math.cos(deg2rad(lat2)) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     var d = R * c;
     return d;
@@ -97,13 +110,19 @@ export default function HomePage({ navigation }) {
     <ScrollView contentContainerStyle={styles.scroll}>
       <LinearGradient colors={['#ff6a00', '#ee0979']} style={styles.hero}>
         <Text style={styles.heroText}>Discover Safe & Delicious</Text>
-        <Text style={[styles.heroText, { fontWeight: 'bold' }]}>Mumbai Street Food</Text>
+        <Text style={[styles.heroText, { fontWeight: 'bold' }]}>
+          Mumbai Street Food
+        </Text>
         <Text style={styles.subText}>
-          Explore Mumbai's vibrant street food culture with hygiene-based ratings & reviews.
+          Explore Mumbai's vibrant street food culture with hygiene-based
+          ratings & reviews.
         </Text>
 
         <View style={styles.btnContainer}>
-          <TouchableOpacity style={styles.actionBtn} onPress={() => navigation.navigate('VendorList')}>
+          <TouchableOpacity
+            style={styles.actionBtn}
+            onPress={() => navigation.navigate('VendorList')}
+          >
             <Ionicons name="search" size={18} color="#fff" />
             <Text style={styles.btnText}>Find Vendors</Text>
           </TouchableOpacity>
@@ -116,15 +135,30 @@ export default function HomePage({ navigation }) {
 
       <Text style={styles.sectionTitle}>How Khana Khazana Works</Text>
       <View style={styles.cardContainer}>
-        <FeatureCard icon={<MaterialIcons name="stars" size={32} color="#f57c00" />} title="Add me a vendor" />
-        <FeatureCard icon={<Ionicons name="location" size={32} color="#f57c00" />} title="Find Spots" />
-        <FeatureCard icon={<MaterialCommunityIcons name="food-fork-drink" size={32} color="#f57c00" />} title="Review Food" />
+        <FeatureCard
+          icon={<MaterialIcons name="stars" size={32} color="#f57c00" />}
+          title="Add me a vendor"
+        />
+        <FeatureCard
+          icon={<Ionicons name="location" size={32} color="#f57c00" />}
+          title="Find Spots"
+        />
+        <FeatureCard
+          icon={
+            <MaterialCommunityIcons
+              name="food-fork-drink"
+              size={32}
+              color="#f57c00"
+            />
+          }
+          title="Review Food"
+        />
       </View>
 
       {location && (
-        <View style={{ height: 200, margin: 16, borderRadius: 12, overflow: 'hidden' }}>
+        <View style={styles.mapContainer}>
           <MapView
-            style={{ flex: 1 }}
+            style={StyleSheet.absoluteFillObject}
             region={{
               latitude: location.latitude,
               longitude: location.longitude,
@@ -133,7 +167,10 @@ export default function HomePage({ navigation }) {
             }}
           >
             <Marker
-              coordinate={{ latitude: location.latitude, longitude: location.longitude }}
+              coordinate={{
+                latitude: location.latitude,
+                longitude: location.longitude,
+              }}
               title="You are here"
             />
           </MapView>
@@ -144,7 +181,7 @@ export default function HomePage({ navigation }) {
       <FlatList
         horizontal
         data={topRatedVendors}
-        keyExtractor={item => item.id}
+        keyExtractor={(item) => item.id}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.horizontalList}
         renderItem={({ item }) => (
@@ -152,7 +189,9 @@ export default function HomePage({ navigation }) {
             <Image source={{ uri: item.image }} style={styles.vendorImage} />
             <Text style={styles.vendorName}>{item.name}</Text>
             <Text style={styles.vendorLocation}>{item.location}</Text>
-            <Text style={styles.vendorSpecialty}>Specialty: {item.specialty}</Text>
+            <Text style={styles.vendorSpecialty}>
+              Specialty: {item.specialty}
+            </Text>
             <Text style={styles.vendorRating}>Rating: {item.rating}⭐</Text>
           </View>
         )}
@@ -162,7 +201,7 @@ export default function HomePage({ navigation }) {
       <FlatList
         horizontal
         data={popularFoodTrails}
-        keyExtractor={item => item.id}
+        keyExtractor={(item) => item.id}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.horizontalList}
         renderItem={({ item }) => (
@@ -170,7 +209,9 @@ export default function HomePage({ navigation }) {
             <Image source={{ uri: item.image }} style={styles.foodTrailImage} />
             <Text style={styles.foodTrailName}>{item.name}</Text>
             <Text style={styles.foodTrailLikes}>{item.likes} Likes</Text>
-            <Text style={styles.foodTrailAddress}>Address: {item.address}</Text>
+            <Text style={styles.foodTrailAddress}>
+              Address: {item.address}
+            </Text>
           </View>
         )}
       />
@@ -230,6 +271,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'center',
     color: '#333',
+  },
+  mapContainer: {
+    height: 250,
+    margin: 16,
+    borderRadius: 12,
+    overflow: 'hidden',
+    position: 'relative',
   },
   horizontalList: {
     paddingLeft: 16,

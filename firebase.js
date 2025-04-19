@@ -2,7 +2,7 @@
 // firebase/firebaseConfig.js
 import { initializeApp } from "firebase/app";
 import { getAuth } from 'firebase/auth';
-import { getFirestore } from "firebase/firestore"; // Firestore for database
+import { getFirestore,collection,getDocs } from "firebase/firestore"; // Firestore for database
 
 
 // Your web app's Firebase configuration
