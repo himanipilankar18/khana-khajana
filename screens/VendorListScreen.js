@@ -1,20 +1,21 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
+import AddVendorForm from '../components/AddVendorForm';
 import VendorList from '../components/VendorList';
 
 const VendorListScreen = () => {
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
+      <AddVendorForm />
       <VendorList />
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    paddingTop: 40,
-    backgroundColor: '#fff',
+    padding: 16,
+    paddingBottom: 100, // Add extra bottom padding for scrolling comfort
   },
 });
 
