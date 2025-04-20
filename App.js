@@ -22,10 +22,11 @@ export default function App() {
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="SignUp" component={SignUp} />
         <Stack.Screen name="Home" component={HomePage} />
+        <Stack.Screen name="VendorDashboard" component={VendorDashboard} />
         <Stack.Screen name="ExploreTraits" component={ExploreTraits} />
         <Stack.Screen name="VendorProfile" component={VendorProfile} />
         <Stack.Screen name="VendorList" component={VendorListScreen} />
-        <Stack.Screen name="VendorDashboard" component={VendorDashboard} />
+        
       </Stack.Navigator>
     </NavigationContainer>
   );

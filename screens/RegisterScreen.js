@@ -20,11 +20,11 @@ export default function RegisterScreen({ navigation }) {
       // Save user type to Firestore
       await setDoc(doc(db, 'users', user.uid), {
         email: user.email,
-        userType: userType,
+        userType: user.role,
       });
 
       // Redirect after registration
-      if (userType === 'vendor') {
+      if (userType.toLowerCase() === 'vendor') {
         navigation.replace('VendorDashboard');
       } else {
         navigation.replace('Home');

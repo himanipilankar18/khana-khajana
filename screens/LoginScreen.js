@@ -17,15 +17,16 @@ const uid = userCredential.user.uid;
 // Get role from Firestore
 const userDoc = await getDoc(doc(db, 'users', uid));
 const userData = userDoc.data();
-const userRole = userData?.role || 'User';
+const userRole = userData?.role?.toLowerCase()
+
 
 Alert.alert("Success", `Logged in as ${userRole}!`);
-if (userRole === 'Vendor') {
-  navigation.replace('VendorDashboard');
-} else {
-  navigation.replace('Home');
-}
-
+if (userRole === 'vendor') {
+    navigation.replace('VendorDashboard');
+  } else {
+    navigation.replace('Home');
+  }
+  
 
     } catch (error) {
       Alert.alert("Login Failed", error.message);

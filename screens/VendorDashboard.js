@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, TextInput, Button, ScrollView, Alert } from 'react-native';
 import { auth, db } from '../firebase';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { doc, getDoc, updateDoc, collection, getDocs } from 'firebase/firestore';
 import * as ImagePicker from 'expo-image-picker';
 
 export default function VendorDashboard() {
@@ -9,6 +9,7 @@ export default function VendorDashboard() {
   const [location, setLocation] = useState('');
   const [hours, setHours] = useState('');
   const [image, setImage] = useState(null);
+  const [individualAverages, setIndividualAverages] = useState(null);
 
   const user = auth.currentUser;
 
@@ -18,10 +19,31 @@ export default function VendorDashboard() {
         const docRef = doc(db, 'users', user.uid);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
-          setVendorData(docSnap.data());
-          setLocation(docSnap.data().location || '');
-          setHours(docSnap.data().hours || '');
-          setImage(docSnap.data().photo || null);
+          const data = docSnap.data();
+          setVendorData(data);
+          setLocation(data.location || '');
+          setHours(data.hours || '');
+          setImage(data.photo || null);
+        }
+
+        const reviewsSnap = await getDocs(collection(docRef, 'reviews'));
+        const reviews = reviewsSnap.docs.map(doc => doc.data());
+
+        const paramTotals = { gloves: 0, hairCaps: 0, cleanliness: 0, utensils: 0 };
+        reviews.forEach(r => {
+          Object.keys(paramTotals).forEach(k => {
+            paramTotals[k] += r.individualRatings?.[k] || 0;
+          });
+        });
+
+        const counts = reviews.length;
+        if (counts > 0) {
+          setIndividualAverages({
+            gloves: (paramTotals.gloves / counts).toFixed(1),
+            hairCaps: (paramTotals.hairCaps / counts).toFixed(1),
+            cleanliness: (paramTotals.cleanliness / counts).toFixed(1),
+            utensils: (paramTotals.utensils / counts).toFixed(1),
+          });
         }
       }
     };
@@ -42,7 +64,10 @@ export default function VendorDashboard() {
   };
 
   const pickImage = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({ mediaTypes: ImagePicker.MediaTypeOptions.Images, quality: 0.5 });
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 0.5,
+    });
     if (!result.canceled) {
       setImage(result.assets[0].uri);
     }
@@ -55,14 +80,23 @@ export default function VendorDashboard() {
       {vendorData && (
         <>
           <Image
-  source={image ? { uri: image } : { uri: 'https://via.placeholder.com/400x200.png?text=Street+Food+Stall' }}
-  style={styles.image}
-/>
+            source={image ? { uri: image } : { uri: 'https://via.placeholder.com/400x200.png?text=Street+Food+Stall' }}
+            style={styles.image}
+          />
 
           <Button title="Upload Stall Photo" onPress={pickImage} />
 
           <Text style={styles.label}>Vendor Name: {vendorData.name}</Text>
           <Text style={styles.label}>Hygiene Rating: ⭐ {vendorData.hygieneRating || 'N/A'}</Text>
+
+          {individualAverages && (
+            <View style={styles.subratings}>
+              <Text>🧤 Gloves: {individualAverages.gloves}</Text>
+              <Text>👒 Hair Caps: {individualAverages.hairCaps}</Text>
+              <Text>🧽 Cleanliness: {individualAverages.cleanliness}</Text>
+              <Text>🍽️ Utensils: {individualAverages.utensils}</Text>
+            </View>
+          )}
 
           <Text style={styles.label}>Location</Text>
           <TextInput value={location} onChangeText={setLocation} style={styles.input} placeholder="E.g. Juhu Beach" />
@@ -71,15 +105,6 @@ export default function VendorDashboard() {
           <TextInput value={hours} onChangeText={setHours} style={styles.input} placeholder="E.g. 4 PM - 10 PM" />
 
           <Button title="Save Updates" onPress={updateProfile} />
-
-          <Text style={styles.sectionTitle}>Recent Customer Reviews</Text>
-          {vendorData.reviews?.length > 0 ? (
-            vendorData.reviews.map((review, idx) => (
-              <Text key={idx} style={styles.review}>- {review}</Text>
-            ))
-          ) : (
-            <Text style={styles.review}>No reviews yet.</Text>
-          )}
         </>
       )}
     </ScrollView>
@@ -92,6 +117,5 @@ const styles = StyleSheet.create({
   label: { fontWeight: '600', marginTop: 15 },
   input: { borderWidth: 1, borderColor: '#ccc', borderRadius: 5, padding: 10, marginTop: 5 },
   image: { width: '100%', height: 200, borderRadius: 10, marginVertical: 10 },
-  sectionTitle: { fontSize: 18, marginTop: 30, fontWeight: 'bold' },
-  review: { fontStyle: 'italic', marginTop: 5 },
+  subratings: { marginTop: 10 },
 });
