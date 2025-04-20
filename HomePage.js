@@ -98,17 +98,23 @@ export default function HomePage({ navigation }) {
         </Text>
 
         <View style={styles.btnContainer}>
-          <TouchableOpacity
-            style={styles.actionBtn}
-            onPress={() => navigation.navigate('VendorList')}
-          >
-            <Ionicons name="search" size={18} color="#fff" />
-            <Text style={styles.btnText}>Find Vendors</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('ExploreTraits')}>
-            <Text style={{ color: '#fff', marginLeft: 12 }}>Explore Trails</Text>
-          </TouchableOpacity>
-        </View>
+  <TouchableOpacity
+    style={styles.actionBtn}
+    onPress={() => navigation.navigate('VendorList')}
+  >
+    <Ionicons name="search" size={18} color="#fff" />
+    <Text style={styles.btnText}>Find Vendors</Text>
+  </TouchableOpacity>
+
+  <TouchableOpacity
+    style={styles.actionBtn}
+    onPress={() => navigation.navigate('ExploreTraits')}
+  >
+    <Ionicons name="map" size={18} color="#fff" />
+    <Text style={styles.btnText}>Explore Trails</Text>
+  </TouchableOpacity>
+</View>
+
       </LinearGradient>
       <View style={{ height: 300, marginHorizontal: 16, borderRadius: 12, overflow: 'hidden', marginTop: 20 }}>
   {location && (
@@ -159,7 +165,7 @@ export default function HomePage({ navigation }) {
               <Text style={styles.vendorName}>{item.name}</Text>
               <Text style={styles.vendorLocation}>{item.location}</Text>
               <Text style={styles.vendorSpecialty}>
-                Specialty: {item.specialty || 'N/A'}
+                Specialty: {item.Specialty || 'N/A'}
               </Text>
               <Text style={styles.vendorRating}>
                 Hygiene Score: {item.hygiene_score ?? 'N/A'}⭐
@@ -201,57 +207,137 @@ export default function HomePage({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  scroll: { paddingBottom: 30 },
+  scroll: {
+    paddingBottom: 40,
+    backgroundColor: '#fefcfb',
+  },
   hero: {
     padding: 30,
     paddingTop: 70,
+    backgroundColor: '#ff7043',
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
   },
-  heroText: { color: '#fff', fontSize: 26, textAlign: 'center' },
-  subText: { color: '#fff', marginTop: 10, fontSize: 14, textAlign: 'center' },
-  btnContainer: { flexDirection: 'row', justifyContent: 'center', marginTop: 20 },
+  heroText: {
+    color: '#fff',
+    fontSize: 28,
+    fontWeight: '700',
+    textAlign: 'center',
+  },
+  subText: {
+    color: '#fff',
+    marginTop: 12,
+    fontSize: 16,
+    textAlign: 'center',
+    opacity: 0.9,
+  },
+  btnContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 24,
+  },
   actionBtn: {
-    backgroundColor: '#f57c00',
+    backgroundColor: '#ffab40',
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    borderRadius: 10,
+    paddingHorizontal: 18,
+    paddingVertical: 12,
+    borderRadius: 14,
     marginHorizontal: 10,
+    shadowColor: '#ffb74d',
+    shadowOpacity: 0.4,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 6,
+    elevation: 4,
   },
-  btnText: { color: '#fff', marginLeft: 8, fontSize: 16 },
+  btnText: {
+    color: '#fff',
+    marginLeft: 8,
+    fontSize: 16,
+    fontWeight: '600',
+  },
   sectionTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginVertical: 25,
+    fontSize: 22,
+    fontWeight: '700',
+    marginVertical: 28,
     textAlign: 'center',
+    color: '#333',
   },
   carouselCard: {
     width: '100%',
     alignItems: 'center',
     backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 10,
-    marginRight: 10,
+    borderRadius: 16,
+    padding: 12,
+    marginRight: 12,
     shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
-    elevation: 3,
+    shadowOpacity: 0.08,
+    shadowOffset: { width: 0, height: 3 },
+    shadowRadius: 5,
+    elevation: 4,
   },
   carouselImage: {
     width: '100%',
-    height: 150,
-    borderRadius: 8,
-    marginBottom: 8,
+    height: 160,
+    borderRadius: 12,
+    marginBottom: 10,
     resizeMode: 'cover',
   },
-  vendorName: { fontWeight: 'bold', fontSize: 16 },
-  vendorLocation: { fontSize: 12, color: '#777' },
-  vendorSpecialty: { fontSize: 12, marginTop: 4 },
-  vendorRating: { fontSize: 12, color: '#f57c00', marginTop: 2 },
-  foodTrailName: { fontWeight: 'bold', fontSize: 16 },
-  foodTrailLikes: { fontSize: 12, color: '#777' },
-  foodTrailAddress: { fontSize: 12, marginTop: 4 },
+  vendorName: {
+    fontWeight: '700',
+    fontSize: 16,
+    color: '#333',
+  },
+  vendorLocation: {
+    fontSize: 13,
+    color: '#888',
+    marginTop: 2,
+  },
+  vendorSpecialty: {
+    fontSize: 13,
+    marginTop: 4,
+    color: '#444',
+  },
+  vendorRating: {
+    fontSize: 13,
+    color: '#ff9800',
+    marginTop: 2,
+    fontWeight: '600',
+  },
+  foodTrailName: {
+    fontWeight: '700',
+    fontSize: 16,
+    color: '#333',
+  },
+  foodTrailLikes: {
+    fontSize: 13,
+    color: '#777',
+    marginTop: 2,
+  },
+  foodTrailAddress: {
+    fontSize: 13,
+    marginTop: 4,
+    color: '#444',
+  },
+  exploreButton: {
+    backgroundColor: '#f57c00',
+    paddingVertical: 12,
+    paddingHorizontal: 2,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOpacity: 0.15,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    elevation: 3,
+    marginTop: 10,
+  },
+  
+  exploreButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  
 });

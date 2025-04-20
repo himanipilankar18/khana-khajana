@@ -74,13 +74,71 @@ navigation.replace('Home'); // Optionally change this to route by role
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: "center", padding: 20, backgroundColor: "#F5CB58" },
-  heading: { fontSize: 28, marginBottom: 20, textAlign: 'center', color: "#E95322", fontWeight: 'bold' },
-  input: { backgroundColor: '#fff', borderWidth: 1, borderColor: '#E95322', padding: 10, marginBottom: 15, borderRadius: 8 },
-  link: { marginTop: 15, color: 'black', textAlign: 'center' },
-  buttonContainer: { marginTop: 10, borderRadius: 10, overflow: 'hidden' },
-  roleContainer: { flexDirection: 'row', justifyContent: 'center', marginBottom: 15 },
-  roleButton: { paddingVertical: 10, paddingHorizontal: 20, marginHorizontal: 10, borderWidth: 1, borderColor: '#E95322', borderRadius: 8, backgroundColor: '#fff' },
-  selectedRole: { backgroundColor: '#E95322' },
-  roleText: { color: '#000', fontWeight: 'bold' }
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    padding: 24,
+    backgroundColor: "#F5CB58",
+  },
+  heading: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    color: "#E95322",
+    textAlign: 'center',
+    marginBottom: 30,
+  },
+  input: {
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#E95322',
+    borderRadius: 10,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    fontSize: 16,
+    marginBottom: 16,
+  },
+  buttonContainer: {
+    marginTop: 20,
+    borderRadius: 12,
+    overflow: 'hidden',
+    backgroundColor: '#E95322',
+  },
+  buttonText: {
+    paddingVertical: 14,
+    textAlign: 'center',
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  link: {
+    marginTop: 20,
+    color: '#333',
+    textAlign: 'center',
+    textDecorationLine: 'underline',
+    fontSize: 14,
+  },
+  roleContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginBottom: 20,
+  },
+  roleButton: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    marginHorizontal: 8,
+    borderWidth: 1.5,
+    borderColor: '#E95322',
+    borderRadius: 10,
+    backgroundColor: '#fff',
+  },
+  selectedRole: {
+    backgroundColor: '#E95322',
+  },
+  roleText: {
+    fontWeight: 'bold',
+    color: 'black',
+  },
+  selectedRoleText: {
+    color: '#fff',
+  },
 });

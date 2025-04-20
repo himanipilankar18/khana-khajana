@@ -38,36 +38,41 @@ const VendorCard = ({ vendor }) => {
 };
 
 const styles = StyleSheet.create({
-  card: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 16,
-    margin: 12,
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
-  image: {
-    width: '100%',
-    height: 180,
-    borderRadius: 10,
-    marginBottom: 12,
-  },
-  name: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  location: {
-    marginTop: 4,
-    color: '#666',
-  },
-  score: {
-    marginTop: 6,
-    fontWeight: 'bold',
-    color: '#388e3c',
-  },
-});
+    card: {
+      backgroundColor: '#fff',
+      borderRadius: 16,
+      padding: 18,
+      marginHorizontal: 16,
+      marginBottom: 20,
+      elevation: 4,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.08,
+      shadowRadius: 6,
+    },
+    image: {
+      width: '100%',
+      height: 200,
+      borderRadius: 12,
+      marginBottom: 14,
+    },
+    name: {
+      fontSize: 22,
+      fontWeight: 'bold',
+      color: '#333',
+      marginBottom: 4,
+    },
+    location: {
+      fontSize: 14,
+      color: '#888',
+      marginBottom: 6,
+    },
+    score: {
+      fontSize: 16,
+      fontWeight: 'bold',
+      color: '#4CAF50', // a more vibrant green
+    },
+  });
+  
 
 export default VendorCard;

@@ -112,10 +112,84 @@ export default function VendorDashboard() {
 }
 
 const styles = StyleSheet.create({
-  container: { padding: 20 },
-  title: { fontSize: 24, fontWeight: 'bold', textAlign: 'center', marginBottom: 20 },
-  label: { fontWeight: '600', marginTop: 15 },
-  input: { borderWidth: 1, borderColor: '#ccc', borderRadius: 5, padding: 10, marginTop: 5 },
-  image: { width: '100%', height: 200, borderRadius: 10, marginVertical: 10 },
-  subratings: { marginTop: 10 },
-});
+    container: {
+      padding: 20,
+      backgroundColor: '#fdfdfd',
+      flex: 1,
+    },
+    title: {
+      fontSize: 26,
+      fontWeight: 'bold',
+      textAlign: 'center',
+      marginBottom: 25,
+      color: '#333',
+    },
+    label: {
+      fontWeight: '600',
+      fontSize: 16,
+      marginTop: 20,
+      color: '#444',
+    },
+    input: {
+      borderWidth: 1,
+      borderColor: '#ddd',
+      borderRadius: 10,
+      padding: 12,
+      marginTop: 8,
+      backgroundColor: '#fff',
+      fontSize: 15,
+    },
+    image: {
+      width: '100%',
+      height: 200,
+      borderRadius: 12,
+      marginVertical: 15,
+      resizeMode: 'cover',
+    },
+    subratings: {
+      marginTop: 20,
+      paddingVertical: 10,
+      borderTopWidth: 1,
+      borderTopColor: '#eee',
+    },
+    subratingRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginBottom: 15,
+    },
+    subratingLabel: {
+      flex: 1,
+      fontSize: 15,
+      color: '#555',
+    },
+    progressBarContainer: {
+      flex: 2,
+      height: 10,
+      backgroundColor: '#eee',
+      borderRadius: 10,
+      overflow: 'hidden',
+      marginLeft: 10,
+    },
+    progressBar: {
+      height: '100%',
+      backgroundColor: '#4caf50',
+      borderRadius: 10,
+    },
+    icon: {
+      marginRight: 10,
+      color: '#f57c00',
+    },
+    saveButton: {
+      backgroundColor: '#f57c00',
+      padding: 15,
+      borderRadius: 12,
+      marginTop: 30,
+      alignItems: 'center',
+    },
+    saveButtonText: {
+      color: '#fff',
+      fontSize: 16,
+      fontWeight: '600',
+    },
+  });
+  

@@ -8,6 +8,7 @@ import {
   StyleSheet,
   TextInput,
   ScrollView,
+  SafeAreaView,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { uploadToCloudinary } from '../utils/uploadToCloudinary';
@@ -123,6 +124,7 @@ export default function ExploreTraits({ navigation }) {
     .filter(item => item.vendors.length > 0);
 
   return (
+    <SafeAreaView style={styles.safeArea}>
     <ScrollView style={styles.container}>
       <Text style={styles.heading}>Create New Food Trail</Text>
 
@@ -273,100 +275,132 @@ export default function ExploreTraits({ navigation }) {
         </View>
       )}
     </ScrollView>
-  );
-}
+  </SafeAreaView> );
+ }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-    backgroundColor: '#f9f9f9',
-  },
-  heading: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginVertical: 10,
-  },
-  searchInput: {
-    backgroundColor: '#fff',
-    padding: 10,
-    borderRadius: 10,
-    marginBottom: 10,
-    fontSize: 16,
-    elevation: 2,
-  },
-  filterScroll: {
-    marginBottom: 16,
-  },
-  filterButton: {
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 20,
-    backgroundColor: '#ddd',
-    marginRight: 8,
-    marginBottom: 10,
-  },
-  filterButtonSelected: {
-    backgroundColor: '#ff7f50',
-  },
-  filterText: {
-    color: '#333',
-    fontWeight: '500'
-  },
-  filterTextSelected: {
-    color: '#fff',
-  },
-  foodCard: {
-    marginBottom: 30,
-  },
-  foodName: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 10,
-  },
-  trailImage: {
-    width: '100%',
-    height: 180,
-    borderRadius: 10,
-    marginBottom: 10,
-  },
-  vendorCard: {
-    backgroundColor: '#fff',
-    padding: 10,
-    marginRight: 10,
-    borderRadius: 10,
-    elevation: 2,
-    alignItems: 'center',
-  },
-  vendorImage: {
-    width: 80,
-    height: 80,
-    borderRadius: 8,
-  },
-  vendorName: {
-    marginTop: 6,
-    fontSize: 14,
-  },
-  mapOverlay: {
-    position: 'absolute',
-    top: 0, left: 0, right: 0, bottom: 0,
-    backgroundColor: 'white',
-    zIndex: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  map: {
-    width: '100%',
-    height: '80%',
-  },
-  confirmButton: {
-    backgroundColor: '#4caf50',
-    padding: 12,
-    borderRadius: 8,
-    marginTop: 10,
-  },
-  confirmButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
-  },
-});
+ const styles = StyleSheet.create({
+    safeArea: {
+      flex: 1,
+      backgroundColor: '#FAFAFA',
+    },
+    scrollContainer: {
+      paddingBottom: 40,
+    },
+    container: {
+      flex: 1,
+      paddingHorizontal: 20,
+      paddingTop: 20,
+      backgroundColor: '#FAFAFA',
+    },
+    heading: {
+      fontSize: 26,
+      fontWeight: 'bold',
+      marginBottom: 16,
+      marginTop: 50,
+      color: '#333',
+      textAlign:'center',
+    },
+    searchInput: {
+      backgroundColor: '#fff',
+      paddingVertical: 12,
+      paddingHorizontal: 16,
+      borderRadius: 12,
+      fontSize: 16,
+      marginBottom: 20,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.05,
+      shadowRadius: 4,
+      elevation: 2,
+    },
+    filterScroll: {
+      flexDirection: 'row',
+      marginBottom: 16,
+      flexWrap: 'wrap',
+    },
+    filterButton: {
+      paddingVertical: 8,
+      paddingHorizontal: 14,
+      borderRadius: 20,
+      backgroundColor: '#E0E0E0',
+      marginRight: 10,
+      marginBottom: 10,
+    },
+    filterButtonSelected: {
+      backgroundColor: '#FF7F50',
+    },
+    filterText: {
+      color: '#444',
+      fontWeight: '500',
+      fontSize: 14,
+    },
+    filterTextSelected: {
+      color: '#fff',
+    },
+    foodCard: {
+      marginBottom: 28,
+    },
+    foodName: {
+      fontSize: 20,
+      fontWeight: '600',
+      color: '#222',
+      marginBottom: 8,
+    },
+    trailImage: {
+      width: '100%',
+      height: 200,
+      borderRadius: 12,
+      marginBottom: 12,
+    },
+    vendorCard: {
+      backgroundColor: '#fff',
+      padding: 12,
+      marginRight: 12,
+      borderRadius: 12,
+      elevation: 3,
+      alignItems: 'center',
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.08,
+      shadowRadius: 4,
+    },
+    vendorImage: {
+      width: 80,
+      height: 80,
+      borderRadius: 10,
+    },
+    vendorName: {
+      marginTop: 8,
+      fontSize: 15,
+      fontWeight: '500',
+      color: '#333',
+    },
+    mapOverlay: {
+      position: 'absolute',
+      top: 0, left: 0, right: 0, bottom: 0,
+      backgroundColor: 'rgba(255, 255, 255, 0.9)',
+      zIndex: 10,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    map: {
+      width: '100%',
+      height: 300,
+      borderRadius: 12,
+    },
+    confirmButton: {
+      backgroundColor: '#4CAF50',
+      paddingVertical: 14,
+      paddingHorizontal: 20,
+      borderRadius: 10,
+      marginTop: 20,
+      alignSelf: 'center',
+    },
+    confirmButtonText: {
+      color: '#fff',
+      fontWeight: 'bold',
+      fontSize: 16,
+      textAlign: 'center',
+    },
+  });
+  

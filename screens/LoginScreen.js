@@ -61,9 +61,58 @@ if (userRole === 'vendor') {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: "center", padding: 20, backgroundColor: "#F5CB58" },
-  heading: { fontSize: 28, marginBottom: 20, textAlign: 'center', color: "#E95322", fontWeight: 'bold' },
-  input: { backgroundColor: '#fff', borderWidth: 1, borderColor: '#E95322', padding: 10, marginBottom: 15, borderRadius: 8 },
-  link: { marginTop: 15, color: 'black', textAlign: 'center' },
-  buttonContainer: { marginTop: 10, borderRadius: 10, overflow: 'hidden' }
-});
+    container: {
+      flex: 1,
+      justifyContent: "center",
+      padding: 24,
+      backgroundColor: "#FFF8E7", // Soft pastel background
+    },
+    heading: {
+      fontSize: 32,
+      marginBottom: 30,
+      textAlign: 'center',
+      color: "#E95322",
+      fontWeight: 'bold',
+      fontFamily: 'System',
+    },
+    input: {
+      backgroundColor: '#fff',
+      borderWidth: 1,
+      borderColor: '#E0E0E0',
+      paddingVertical: 14,
+      paddingHorizontal: 16,
+      marginBottom: 18,
+      borderRadius: 10,
+      fontSize: 16,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 1 },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
+      elevation: 2,
+    },
+    link: {
+      marginTop: 20,
+      color: '#555',
+      textAlign: 'center',
+      fontSize: 14,
+    },
+    buttonContainer: {
+      marginTop: 16,
+      borderRadius: 12,
+      overflow: 'hidden',
+      backgroundColor: "#E95322",
+      elevation: 3,
+      shadowColor: "#000",
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.25,
+      shadowRadius: 4,
+    },
+    buttonText: {
+      color: "#fff",
+      textAlign: "center",
+      paddingVertical: 14,
+      fontSize: 16,
+      fontWeight: "600",
+    }
+  });
+  

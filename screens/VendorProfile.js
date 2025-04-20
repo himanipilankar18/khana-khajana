@@ -24,30 +24,41 @@ export default function VendorProfile({ route }) {
   }
   
 
-const styles = StyleSheet.create({
-  container: {
-    padding: 16,
-    alignItems: 'center',
-  },
-  center: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  image: {
-    width: 200,
-    height: 200,
-    borderRadius: 12,
-    marginBottom: 20,
-  },
-  name: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 12,
-  },
-  description: {
-    fontSize: 16,
-    textAlign: 'center',
-    color: '#555',
-  },
-});
+  const styles = StyleSheet.create({
+    container: {
+      padding: 20,
+      alignItems: 'center',
+      backgroundColor: '#fff',
+    },
+    center: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    image: {
+      width: 220,
+      height: 220,
+      borderRadius: 16,
+      marginBottom: 24,
+      shadowColor: '#000',
+      shadowOpacity: 0.1,
+      shadowOffset: { width: 0, height: 4 },
+      shadowRadius: 6,
+      elevation: 5,
+    },
+    name: {
+      fontSize: 26,
+      fontWeight: '800',
+      color: '#333',
+      marginBottom: 10,
+      textAlign: 'center',
+    },
+    description: {
+      fontSize: 16,
+      textAlign: 'center',
+      color: '#666',
+      lineHeight: 22,
+      paddingHorizontal: 12,
+    },
+  });
+  

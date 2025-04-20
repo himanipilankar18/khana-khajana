@@ -108,42 +108,66 @@ const AddVendorForm = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    marginTop: 20,
-    backgroundColor: '#fff',
-    padding: 16,
-    borderRadius: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  input: {
-    borderColor: '#E95322',
-    borderWidth: 1,
-    borderRadius: 8,
-    padding: 10,
-    marginBottom: 12,
-    backgroundColor: '#fff',
-  },
-  imagePicker: {
-    backgroundColor: '#eee',
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 12,
-    alignItems: 'center',
-  },
-  imagePickerText: {
-    color: '#E95322',
-    fontWeight: 'bold',
-  },
-  imagePreview: {
-    width: '100%',
-    height: 180,
-    marginBottom: 12,
-    borderRadius: 8,
-  },
-});
-
+    container: {
+      marginTop: 30,
+      backgroundColor: '#fff',
+      padding: 20,
+      borderRadius: 16,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 3 },
+      shadowOpacity: 0.1,
+      shadowRadius: 6,
+      elevation: 3,
+    },
+    heading: {
+      fontSize: 24,
+      fontWeight: 'bold',
+      color: '#E95322',
+      textAlign: 'center',
+      marginBottom: 20,
+    },
+    input: {
+      borderColor: '#E95322',
+      borderWidth: 1.2,
+      borderRadius: 10,
+      paddingVertical: 12,
+      paddingHorizontal: 14,
+      marginBottom: 14,
+      fontSize: 16,
+      backgroundColor: '#fff',
+    },
+    imagePicker: {
+      backgroundColor: '#FFEAD7',
+      padding: 14,
+      borderRadius: 10,
+      marginBottom: 14,
+      alignItems: 'center',
+    },
+    imagePickerText: {
+      color: '#E95322',
+      fontWeight: 'bold',
+      fontSize: 16,
+    },
+    imagePreview: {
+      width: '100%',
+      height: 200,
+      marginBottom: 16,
+      borderRadius: 12,
+      borderWidth: 1,
+      borderColor: '#ddd',
+    },
+    submitButton: {
+      backgroundColor: '#E95322',
+      paddingVertical: 14,
+      borderRadius: 10,
+      alignItems: 'center',
+      marginTop: 10,
+    },
+    submitButtonText: {
+      color: '#fff',
+      fontWeight: 'bold',
+      fontSize: 16,
+    },
+  });
+  
 export default AddVendorForm;
