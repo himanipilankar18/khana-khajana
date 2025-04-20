@@ -12,6 +12,8 @@ import WelcomeScreen from './screens/WelcomeScreen';
 import VendorListScreen from './screens/VendorListScreen';
 import VendorDashboard from './screens/VendorDashboard'; // Create this if not already
 import VendorProfile from './screens/VendorProfile'; 
+import NewcomerGuide from './screens/NewcomerGuide';
+import TrailMapScreen from './screens/TrailMapScreen';
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -26,7 +28,8 @@ export default function App() {
         <Stack.Screen name="ExploreTraits" component={ExploreTraits} />
         <Stack.Screen name="VendorProfile" component={VendorProfile} />
         <Stack.Screen name="VendorList" component={VendorListScreen} />
-        
+        <Stack.Screen name="NewcomerGuide" component={NewcomerGuide} />
+<Stack.Screen name="TrailMap" component={TrailMapScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

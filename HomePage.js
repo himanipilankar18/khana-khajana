@@ -113,6 +113,14 @@ export default function HomePage({ navigation }) {
     <Ionicons name="map" size={18} color="#fff" />
     <Text style={styles.btnText}>Explore Trails</Text>
   </TouchableOpacity>
+
+  <TouchableOpacity
+    style={styles.actionBtn}
+    onPress={() => navigation.navigate('NewcomerGuide')}
+  >
+    <Ionicons name="compass" size={18} color="#fff" />
+    <Text style={styles.btnText}>Newcomer Guide</Text>
+  </TouchableOpacity>
 </View>
 
       </LinearGradient>
@@ -234,6 +242,7 @@ const styles = StyleSheet.create({
   btnContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
+    flexWrap: 'wrap',
     marginTop: 24,
   },
   actionBtn: {
@@ -243,13 +252,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18,
     paddingVertical: 12,
     borderRadius: 14,
-    marginHorizontal: 10,
+    margin: 8, // ✅ Add margin to create spacing all around
     shadowColor: '#ffb74d',
     shadowOpacity: 0.4,
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 6,
     elevation: 4,
+    minWidth: 130, // ✅ Ensures uniform button size for stacking
+  justifyContent: 'center',
   },
+  
   btnText: {
     color: '#fff',
     marginLeft: 8,
