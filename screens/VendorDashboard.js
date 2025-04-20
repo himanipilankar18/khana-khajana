@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Image, TextInput, Button, ScrollView, Alert } f
 import { auth, db } from '../firebase';
 import { doc, getDoc, updateDoc, collection, getDocs } from 'firebase/firestore';
 import * as ImagePicker from 'expo-image-picker';
-
+import HygieneScore from '../components/HygieneScore';
 export default function VendorDashboard() {
   const [vendorData, setVendorData] = useState(null);
   const [location, setLocation] = useState('');
@@ -95,6 +95,7 @@ export default function VendorDashboard() {
               <Text>👒 Hair Caps: {individualAverages.hairCaps}</Text>
               <Text>🧽 Cleanliness: {individualAverages.cleanliness}</Text>
               <Text>🍽️ Utensils: {individualAverages.utensils}</Text>
+              <HygieneScore vendorId={vendorId} />
             </View>
           )}
 
@@ -123,6 +124,7 @@ const styles = StyleSheet.create({
       textAlign: 'center',
       color: '#E95322',
       marginBottom: 25,
+      marginTop: 50,
     },
     label: {
       fontWeight: '600',

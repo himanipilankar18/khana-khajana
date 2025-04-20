@@ -18,7 +18,7 @@ export default function VendorProfile({ route }) {
       <ScrollView contentContainerStyle={styles.container}>
         <Image source={{ uri: vendor.image }} style={styles.image} />
         <Text style={styles.name}>{vendor.name}</Text>
-        <Text style={styles.description}>{vendor.description || 'No description available.'}</Text>
+        <Text style={styles.description}>{vendor.description || 'Famous Place'}</Text>
       </ScrollView>
     );
   }

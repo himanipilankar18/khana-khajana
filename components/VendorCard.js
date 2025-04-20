@@ -32,7 +32,7 @@ const VendorCard = ({ vendor }) => {
       <Text style={styles.location}>📍 {vendor.location}</Text>
       <Text style={styles.score}>🧼 Hygiene Score: {vendor.hygiene_score}</Text>
       <ReviewForm vendorId={vendor.id} />
-      <AddReviewForm vendorId={vendor.id} />
+      
     </View>
   );
 };

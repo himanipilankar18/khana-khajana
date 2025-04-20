@@ -10,8 +10,27 @@ export default function HygieneScore({ vendorId }) {
   useEffect(() => {
     const fetchRatings = async () => {
       const reviewsSnapshot = await getDocs(collection(db, 'vendors', vendorId, 'reviews'));
-      const ratings = reviewsSnapshot.docs.map(doc => doc.data().hygieneRating);
-      const avg = ratings.length ? (ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(1) : 'No ratings yet';
+
+      let total = 0;
+      let count = 0;
+
+      reviewsSnapshot.docs.forEach(doc => {
+        const data = doc.data();
+        const scores = [
+          data.surrounding,
+          data.vendorHygiene,
+          data.kitchenCleanliness,
+          data.foodQuality,
+        ];
+
+        // Only consider valid numeric values
+        if (scores.every(score => typeof score === 'number')) {
+          total += scores.reduce((a, b) => a + b, 0);
+          count += scores.length;
+        }
+      });
+
+      const avg = count > 0 ? (total / count).toFixed(1) : 'No ratings yet';
       setAverage(avg);
     };
 
@@ -20,7 +39,7 @@ export default function HygieneScore({ vendorId }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Avg Hygiene Rating: {average}</Text>
+      <Text style={styles.text}>Avg Hygiene Score: {average}</Text>
     </View>
   );
 }
